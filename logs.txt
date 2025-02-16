@@ -1,0 +1,6 @@
+Vercel CLI 41.0.2
+Fetching deployment "ai-seo-backend-ap1ukgf96-yoram-ezras-projects.vercel.app" in yoram-ezras-projects
+WARN! This command now displays runtime logs. To access your build logs, run `vercel inspect --logs ai-seo-backend-ap1ukgf96-yoram-ezras-projects.vercel.app`
+Displaying runtime logs for deployment ai-seo-backend-ap1ukgf96-yoram-ezras-projects.vercel.app (dpl_Ge5GQjADoHz3ANMUKgPKabH6iRwa) starting from Feb Mo 14:13:51.80
+
+waiting for new logs...

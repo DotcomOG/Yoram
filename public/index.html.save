@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SEO Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+    <div class="container">
+        <h1>AI-Powered SEO Analysis</h1>
+        <p>Enter a website URL below to analyze its SEO performance and get improvement recommendations.</p>
+        
+        <input type="text" id="urlInput" placeholder="Enter website URL..." required>
+        <button onclick="analyzeSEO()">Analyze SEO</button>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        async function analyzeSEO() {
+            const urlInput = document.getElementById("urlInput").value.trim();
+            if (!urlInput) {
+                alert("Please enter a URL.");
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/seo", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url: urlInput })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                document.getElementById("results").innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function displayResults(data) {
+            let resultDiv = document.getElementById("results");
+            resultDiv.innerHTML = `
+                <h2>SEO Report for <a href="${data.url}" target="_blank">${data.url}</a></h2>
+                <p><strong>SEO Score:</strong> ${data.seoScore}/100</p>
+                
+                <h3>🚨 Issues Detected:</h3>
+                <ul>
+                    ${data.issues.length > 0 
+                        ? data.issues.map(issue => `<li><strong>${issue.issue}</strong><br>${issue.explanation}<br><em>Fix:</em> ${issue.fix}</li>`).join("")
+                        : "<li>No major SEO issues detected. Great job!</li>"
+                    }
+                </ul>
+
+                <h3>✅ Good SEO Practices:</h3>
+                <ul>
+                    ${data.goodPractices.length > 0 
+                        ? data.goodPractices.map(practice => `<li>${practice}</li>`).join("")
+                        : "<li>No SEO best practices detected.</li>"
+                    }
+                </ul>
+
+                <h3>📌 Recommendations for Improvement:</h3>
+                <ul>
+                    ${data.recommendations.length > 0 
+                        ? data.recommendations.map(rec => `<li><strong>${rec.recommendation}</strong><br>${rec.explanation}<br><em>Fix:</em> ${rec.fix}</li>`).join("")
+                        : "<li>No additional recommendations.</li>"
+                    }
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>
