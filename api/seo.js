@@ -1,49 +1,42 @@
 import express from 'express';
-import { JSDOM } from 'jsdom';
-import fetch from 'node-fetch';
+import fetch from 'node-fetch'; // Make sure node-fetch is installed
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
-// Serve static files (if any) in the 'public' directory
-app.use(express.static('public'));
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the AI SEO Backend!');
+// Middleware to handle CORS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins for testing
+  res.header("Access-Control-Allow-Methods", "GET, POST");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
 });
 
-app.get('/analyze', async (req, res) => {
-  const { url } = req.query;
-
-  if (!url) {
-    return res.status(400).json({ message: 'URL is required for analysis.' });
-  }
-
+// API route for /town-city-building-ca
+app.get('/town-city-building-ca', async (req, res) => {
   try {
+    const { url } = req.query;
+
+    // Ensure URL is provided
+    if (!url) {
+      return res.status(400).json({ error: "URL query parameter is required" });
+    }
+
+    // Fetch the URL content
     const response = await fetch(url);
     const html = await response.text();
 
-    const dom = new JSDOM(html);
-    const document = dom.window.document;
-
-    const title = document.querySelector('title')?.textContent || 'No title found';
-    const description = document.querySelector('meta[name="description"]')?.getAttribute('content') || 'No description found';
-    const h1 = document.querySelector('h1')?.textContent || 'No H1 found';
-    const h2Count = document.querySelectorAll('h2').length;
-
+    // Perform any processing you need on the fetched HTML
     res.json({
-      title,
-      description,
-      h1,
-      h2Count,
       url,
-      message: '✅ SEO analysis completed successfully',
+      html, // This is where we return the raw HTML for now, you can process it as needed
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error analyzing the URL.', error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://0.0.0.0:${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
