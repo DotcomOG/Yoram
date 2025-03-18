@@ -2,7 +2,9 @@ import express from 'express';
 import fetch from 'node-fetch';
 
 const app = express();
-const port = 8080;
+
+// Use Railway’s assigned PORT or default to 8080 for local testing
+const PORT = process.env.PORT || 8080;
 
 app.use(express.static('public'));
 
@@ -32,6 +34,7 @@ app.get('/town-city-building-ca', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+// Start the server and bind to all network interfaces for Railway deployment
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
 });
