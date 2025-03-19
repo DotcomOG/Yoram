@@ -1,4 +1,5 @@
 {
+  "rootDir": ".",
   "services": [
     {
       "name": "ai-seo-backend",
