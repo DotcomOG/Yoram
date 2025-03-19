@@ -1,9 +1,15 @@
 import express from 'express';
 import fetch from 'node-fetch';
+import cors from 'cors';
 
 const app = express();
 
-// Use Railway’s assigned PORT or default to 8080 for local testing
+app.use(cors());
+
+// Enable CORS for all routes
+app.use(cors());
+
+// Use Railway’s assigned PORT or default to 8080
 const PORT = process.env.PORT || 8080;
 
 app.use(express.static('public'));
@@ -25,7 +31,7 @@ app.get('/town-city-building-ca', async (req, res) => {
         intent: 'informational',
         context: 'User is trying to understand the content of the provided URL',
       },
-      content: body // Send the HTML content as it is.
+      content: body
     };
 
     res.json(pageContent);
@@ -34,7 +40,7 @@ app.get('/town-city-building-ca', async (req, res) => {
   }
 });
 
-// Start the server and bind to all network interfaces for Railway deployment
+// Start the server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
