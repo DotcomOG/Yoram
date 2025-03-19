@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import React, { useState } from 'react';
 
 function App() {
@@ -6,9 +5,10 @@ function App() {
   const [error, setError] = useState(null);
 
   const fetchData = () => {
-    fetch("https://successful-amazement-production.up.railway.app/town-city-building-ca?url=https://example.com")
+fetch("https://successful-amazement-production.up.railway.app/town-city-building-ca?url=https://example.com")    
       .then(response => response.json())
       .then(json => {
+        console.log(json); // <-- Added for debugging
         setData(json);
         setError(null);
       })
@@ -28,14 +28,7 @@ function App() {
         </div>
       )}
       {data ? (
-        <pre
-          style={{
-            background: '#f4f4f4',
-            padding: '20px',
-            marginTop: '10px',
-            borderRadius: '5px'
-          }}
-        >
+        <pre style={{ background: '#f4f4f4', padding: '20px', marginTop: '10px', borderRadius: '5px' }}>
           {JSON.stringify(data, null, 2)}
         </pre>
       ) : (
