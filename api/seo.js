@@ -1,9 +1,10 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import cors from 'cors';
-app.use(cors());
 
-app.use(cors());
+const app = express();
+app.use(cors()); // Must be before routes
+
 
 // Enable CORS for all routes
 app.use(cors());
